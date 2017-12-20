@@ -12,29 +12,27 @@ import java.util.Properties;
  *
  */
 public class PropertyReader {
-    
+
     public static Properties props;
-    
-    static{
-        
+
+    static {
+
         String resourceName = "config.properties"; // could also be a constant
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         props = new Properties();
-        try(InputStream resourceStream = loader.getResourceAsStream(resourceName)) {
+        try (InputStream resourceStream = loader.getResourceAsStream(resourceName)) {
             props.load(resourceStream);
-        } catch (IOException e) {          
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
-    public static String getValue(String propertyName){
+
+    public static String getValue(String propertyName) {
         String value = null;
-        if(props.containsKey(propertyName)){
+        if (props.containsKey(propertyName)) {
             value = props.getProperty(propertyName);
         }
-        return value;        
+        return value;
     }
-    
-    
 
 }

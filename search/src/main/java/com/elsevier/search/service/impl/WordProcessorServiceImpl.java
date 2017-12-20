@@ -7,9 +7,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,33 +26,35 @@ public class WordProcessorServiceImpl implements WordProcessorService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public  List<String> ListDirectoyByWordSearch(final Word wordObject) throws IOException {
+    public List<String> ListDirectoyByWordSearch(final Word wordObject) throws IOException {
+        List<String> tmpList = null;
         List<String> fileList = new ArrayList<>();
-        boolean flag =Boolean.FALSE;
-        String content = null;
-        String[] ext = PropertyReader.getValue("INPUT_FILE_EXT").split(","); 
-            if(StringUtils.isNotBlank(PropertyReader.getValue("INPUT_DIRECTORY_PATH"))){
+        String line = null;
+        String[] ext = PropertyReader.getValue("INPUT_FILE_EXT").split(",");
+        if (StringUtils.isNotBlank(PropertyReader.getValue("INPUT_DIRECTORY_PATH"))) {
             File filePath = new File(PropertyReader.getValue("INPUT_DIRECTORY_PATH"));
             List<File> listOfFiles = (List<File>) FileUtils.listFiles(filePath, ext, true);
             for (File file : listOfFiles) {
-                flag = Boolean.TRUE;
-                content = FileUtils.readFileToString(file);  
-                String[] words = content.split(" ");   
-               List<String> wordList  =Arrays.asList(words);
-                for(String term : wordObject.getKeyword()){
-                    if(!wordList.contains(term)){
-                        flag = Boolean.FALSE;
-                        break;
+                tmpList = new ArrayList<>();
+                try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                    while ((line = br.readLine()) != null) {
+                        String[] words = line.split(" ");
+                        for (String term : wordObject.getKeyword()) {
+                            if (Arrays.asList(words).contains(term) && !tmpList.contains(term)) {
+                                tmpList.add(term);
+                            }
+                        }
+
                     }
+                } catch (IOException e) {
+                    throw e;
                 }
-                
-                if(flag){
+
+                if (tmpList.containsAll(wordObject.getKeyword())) {
                     fileList.add(file.getAbsolutePath());
                 }
-                
-            }       
-         }
+            }
+        }
         return fileList;
     }
-
 }

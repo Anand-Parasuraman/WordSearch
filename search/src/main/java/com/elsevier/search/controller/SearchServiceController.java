@@ -5,8 +5,6 @@ package com.elsevier.search.controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -42,7 +40,8 @@ public class SearchServiceController {
     WordProcessorService wordProcessor;
 
     @POST
-    public Response getDirectoryListByWordsSearch(@DefaultValue(SearchConstant.DEFAULT_EMPTY_STR) final String searchKeywordJson) {
+    public Response getDirectoryListByWordsSearch(
+            @DefaultValue(SearchConstant.DEFAULT_EMPTY_STR) final String searchKeywordJson) {
 
         long startTime = System.nanoTime();
         logger.debug("Execution Started - " + startTime);

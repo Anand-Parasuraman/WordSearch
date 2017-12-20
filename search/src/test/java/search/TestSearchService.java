@@ -12,7 +12,7 @@ public class TestSearchService {
 
     private WordProcessorService wordProcessor = new WordProcessorServiceImpl();
 
-    //@Test
+    // @Test
     public void getDirectoryListByWordsSearch() throws IOException {
         final Word word = new Word();
         word.setKeyword(getMockList());

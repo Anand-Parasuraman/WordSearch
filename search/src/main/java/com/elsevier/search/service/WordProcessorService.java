@@ -13,7 +13,7 @@ import com.elsevier.search.domain.Word;
  *
  */
 public interface WordProcessorService {
-    
+
     List<String> ListDirectoyByWordSearch(Word word) throws IOException;
 
 }
